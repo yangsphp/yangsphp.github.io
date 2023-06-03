@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>js函数</title>
+    <link rel="stylesheet" href="../codemirror/lib/codemirror.css">
+    <link rel="stylesheet" href="../codemirror/theme/monokai.css">
+    <style>
+        .CodeMirror {
+            border: 1px solid black;
+            font-size: 16px;
+            height: 90%;
+        }
+
+        body {
+            width: 1000px;
+            margin: 0 auto;
+        }
+    </style>
+</head>
+
+<body>
+    <textarea id="code" name="code">
+var utils = {
+    /**
+     * 获取url地址所有参数
+     * @param url
+     * @returns {Array}
+     */
+    getQuery: function (url) {
+        var theRequest = [];
+        if (url.indexOf("?") != -1) {
+            var str = url.split('?')[1];
+            var strs = str.split("&");
+            for (var i = 0; i < strs.length; i++) {
+                if (strs[i].split("=")[0] && unescape(strs[i].split("=")[1])) {
+                    theRequest[i] = {
+                        'name': strs[i].split("=")[0],
+                        'value': unescape(strs[i].split("=")[1])
+                    }
+                }
+            }
+        }
+        return theRequest;
+    },
+    /*
+    * 获取url某个参数
+    * url 链接地址
+    * name 参数名称
+    */
+    getUrlParam: function (url, name) {
+        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象
+        var r = url.split('?')[1].match(reg);  //匹配目标参数
+        if (r != null) return unescape(r[2]);
+        return null; //返回参数值
+    },
+    /**
+     * 检查字符串是否为合法QQ号码
+     * @param str
+     * @returns {boolean}
+     */
+    isQQ: function (str) {
+        // 1 首位不能是0 ^[1-9]
+        // 2 必须是 [5, 11] 位的数字 \d{4, 9}
+        let reg = /^[1-9][0-9]{4,9}$/gim;
+        if (reg.test(str)) {
+            console.log('QQ号码格式输入正确');
+            return true;
+        } else {
+            console.log('请输入正确格式的QQ号码');
+            return false;
+        }
+    }
+    ,
+    /**
+     * 检查字符串是否为合法手机号码
+     * @param str
+     * @returns {boolean}
+     */
+    isPhone: function (str) {
+        let reg = /^(0|86|17951)?(13[0-9]|15[012356789]|18[0-9]|14[57]|17[678])[0-9]{8}$/;
+        if (reg.test(str)) {
+            console.log('手机号码格式输入正确');
+            return true;
+        } else {
+            console.log('请输入正确格式的手机号码');
+            return false;
+        }
+    }
+    ,
+    /**
+     * 检查字符串是否为合法Email地址
+     * @param str
+     * @returns {boolean}
+     */
+    isEmail: function (str) {
+        let reg = /^\w+((-\w+)|(\.\w+))*\@[A-Za-z0-9]+((\.|-)[A-Za-z0-9]+)*\.[A-Za-z0-9]+$/;
+        if (reg.test(str)) {
+            console.log('Email格式输入正确');
+            return true;
+        } else {
+            console.log('请输入正确格式的Email');
+            return false;
+        }
+    }
+    ,
+    /**
+     * 检查字符串是否是数字
+     * @param str
+     * @returns {boolean}
+     */
+    isNumber: function (str) {
+        let reg = /^\d+$/;
+        if (reg.test(str)) {
+            console.log(str + '是数字');
+            return true;
+        } else {
+            console.log(str + '不是数字');
+            return false;
+        }
+    }
+    ,
+    /**
+     * 去掉前后空格
+     * @param str
+     * @returns {*}
+     */
+    trim: function (str) {
+        let reg = /^\s+|\s+$/g;
+        return str.replace(reg, '');
+    }
+    ,
+    /**
+     * 检查字符串是否存在中文
+     * @param str
+     * @returns {boolean}
+     */
+    isChinese: function (str) {
+        let reg = /[\u4e00-\u9fa5]/gm;
+        if (reg.test(str)) {
+            console.log(str + ' 中存在中文');
+            return true;
+        } else {
+            console.log(str + ' 中不存在中文');
+            return false;
+        }
+    }
+    ,
+    /**
+     * 检查字符串是否为合法邮政编码
+     * @param str
+     * @returns {boolean}
+     */
+    isPostcode: function (str) {
+        // 起始数字不能为0，然后是5个数字 [1-9]\d{5}
+        let reg = /^[1-9]\d{5}$/g;
+        if (reg.test(str)) {
+            console.log(str + ' 是合法的邮编格式');
+            return true;
+        } else {
+            console.log(str + ' 是不合法的邮编格式');
+            return false;
+        }
+    }
+    ,
+    /**
+     * 检查字符串是否为合法身份证号码
+     * @param str
+     * @returns {boolean}
+     */
+    isIDcard: function (str) {
+        let reg = /^(^[1-9]\d{7}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{3}$)|(^[1-9]\d{5}[1-9]\d{3}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])((\d{4})|\d{3}[Xx])$)$/;
+        if (reg.test(str)) {
+            console.log(str + ' 是合法的身份证号码');
+            return true;
+        } else {
+            console.log(str + ' 是不合法的身份证号码');
+            return false;
+        }
+    }
+    ,
+    /**
+     * 检查字符串是否为合法URL
+     * @param str
+     * @returns {boolean}
+     */
+    isURL: function (str) {
+        let reg = /^https?:\/\/(([a-zA-Z0-9_-])+(\.)?)*(:\d+)?(\/((\.)?(\?)?=?&?[a-zA-Z0-9_-](\?)?)*)*$/i;
+        if (reg.test(str)) {
+            console.log(str + ' 是合法的URL');
+            return true;
+        } else {
+            console.log(str + ' 是不合法的URL');
+            return false;
+        }
+    }
+    ,
+    /**
+     * 检查字符串是否为合法日期格式 yyyy-mm-dd
+     * @param str
+     * @returns {boolean}
+     */
+    isDate: function (str) {
+        let reg = /^[1-2][0-9][0-9][0-9]-[0-1]{0,1}[0-9]-[0-3]{0,1}[0-9]$/;
+        if (reg.test(str)) {
+            console.log(str + ' 是合法的日期格式');
+            return true;
+        } else {
+            console.log(str + ' 是不合法的日期格式，yyyy-mm-dd');
+            return false;
+        }
+    }
+    ,
+    /**
+     * 检查字符串是否为合法IP地址
+     * @param str
+     * @returns {boolean}
+     */
+    isIP: function (str) {
+        // 1.1.1.1 四段 [0 , 255]
+        // 第一段不能为0
+        // 每个段不能以0开头
+        //
+        // 本机IP: 58.50.120.18 湖北省荆州市 电信
+        let reg = /^([1-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])(\.([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])){3}$/gi;
+        if (reg.test(str)) {
+            console.log(str + ' 是合法的IP地址');
+            return true;
+        } else {
+            console.log(str + ' 是不合法的IP地址');
+            return false;
+        }
+    }
+    ,
+    /**
+     * 获取cookie
+     * @param name
+     * @returns {*}
+     */
+    getCookie: function (name) {
+        var cookieArr = document.cookie.split("; ");//使用"; "分割Cookie
+        var cva = [], temp;
+        //循环的得到Cookie名称与值
+        for (i = 0; i < cookieArr.length; i++) {
+            temp = cookieArr[i].split("=");//用"="分割Cookie的名称与值
+            cva[temp[0]] = unescape(temp[1]);
+        }
+        if (name) {
+            //如果有name则输出这个name的Cookie值
+            return cva[name];
+        }
+        else {
+            //如果没有name则输出空数组
+            return cva;
+        }
+    }
+    ,
+    /**
+     * 保存cookie（保存时间为30天）
+     * @param name
+     * @param value
+     */
+    setCookie: function (name, value, Days = 30) {
+        var exp = new Date();
+        exp.setTime(exp.getTime() + Days * 24 * 60 * 60 * 1000);
+        document.cookie = name + "=" + escape(value) + ";expires=" + exp.toGMTString() + ";path=/";
+    }
+    ,
+    /**
+     * 删除cookie
+     * @param name
+     */
+    delCookie: function (name) {
+        var exp = new Date();
+        exp.setTime(exp.getTime() - 1);
+        var cval = this.getCookie(name);
+        if (cval != null) {
+            document.cookie = name + "=" + cval + ";expires=" + exp.toGMTString() + ";path=/";
+        }
+    }
+    ,
+    /**
+     * 判断某个值是否在一维数组中
+     * @param array
+     * @param search
+     * @returns {boolean}
+     */
+    inArray: function (array, search) {
+        for (var i in array) {
+            if (array[i] == search) {
+                return true;
+            }
+        }
+        return false;
+    },
+    /**
+     * 正则给有img的字符串添加style属性
+     * @param htmlstr
+     * @param style
+     * @returns {*}
+     */
+    imgTagAddStyle: function (htmlstr, style='max-width:100%;height:auto;') {
+        // 正则匹配所有img标签
+        var regex1 = new RegExp("(i?)(\<img)(?!(.*?style=['\"](.*)['\"])[^\>]+\>)", 'gmi')
+        // 给不含style="" 或 style='' 的img标签加上style=""
+        htmlstr = htmlstr.replace(regex1, '$2 style=""$3')
+        console.log('增加style=""后的html字符串：' + htmlstr)
+        // 正则匹配含有style的img标签
+        // eslint-disable-next-line no-useless-escape
+        var regex2 = new RegExp("(i?)(\<img.*?style=['\"])([^\>]+\>)", 'gmi')
+        // 在img标签的style里面增加css样式(这里增加的样式：display:block;max-width:100%;height:auto;border:5px solid red;)
+        htmlstr = htmlstr.replace(regex2, '$2'+style+'$3')
+        console.log('在img标签的style里面增加样式后的html字符串：' + htmlstr)
+        return htmlstr
+    }
+}
+</textarea>
+</body>
+<script src="../codemirror/lib/codemirror.js"></script>
+<script src="../codemirror/addon/edit/matchbrackets.js"></script>
+<script src="../codemirror/addon/selection/active-line.js"></script>
+<script src="../codemirror/keymap/sublime.js"></script>
+<script src="../codemirror/mode/javascript/javascript.js"></script>
+<script>
+    let editor = CodeMirror.fromTextArea(document.getElementById("code"), {
+        mode: 'javascript', //设置编译器编程语言关联内容，需要引入mode/javascript/javascript.js
+        lineNumbers: true, //显示行号
+        smartIndent: true, //自动缩进是否开启
+        indentUnit: 4, //缩进单位
+        theme: 'monokai', //设置主题
+        styleActiveLine: true, //设置光标所在行高亮，需要引入addon/selection/active-line.js
+        keyMap: 'sublime', // 快捷键，default使用默认快捷键，除此之外包括emacs，sublime，vim快捷键，使用需引入工具,keymap/sublime.js
+        extraKeys: { 'Ctrl-Q': 'autocomplete' }, //设置快捷键
+    });
+</script>
+
+</html>
