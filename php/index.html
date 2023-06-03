@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>js函数</title>
+    <title>php函数</title>
     <link rel="stylesheet" href="../codemirror/lib/codemirror.css">
     <link rel="stylesheet" href="../codemirror/theme/monokai.css">
     <style>
@@ -515,7 +515,7 @@ function insertSql($table, $array)
 }
 
 /**
- * 对富文本信息中的数据匹配出所有的 <img> 标签的 src属性
+ * 对富文本信息中的数据匹配出所有的 img 标签的 src属性
  * @url getPatternMatchImages
  * @method GET
  * @param string $contentStr 富文本字符串
@@ -540,7 +540,6 @@ function getPatternMatchImages($contentStr = "")
             }
         }
     }
-    //$pattern= '/<img\b.+\bsrc\b\s*=\s*[\'\"]([^\'\"]*)[\'\"]/iU';
     return $imgSrcArr;
 }
 
@@ -695,6 +694,9 @@ function json($statusCode, $message = '', $data = array())
     return json_encode($response);
 }
 </textarea>
+<script>
+
+</script>
 </body>
 <script src="../codemirror/lib/codemirror.js"></script>
 <script src="../codemirror/addon/edit/matchbrackets.js"></script>
