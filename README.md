@@ -4,5 +4,5 @@
 # python笔记
 [python](https://yangsphp.github.io/python)
 
-# php函数笔记
-[php](https://yangsphp.github.io/js)
+# js函数笔记
+[js](https://yangsphp.github.io/js)
