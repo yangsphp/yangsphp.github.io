@@ -32,7 +32,7 @@
  * @param string $passsalt 盐
  * @return string $str 生成的密码
  */
-public function createPassword($password, $passsalt)
+function createPassword($password, $passsalt)
 {
     return md5(md5(md5($password)) . $passsalt);
 }
