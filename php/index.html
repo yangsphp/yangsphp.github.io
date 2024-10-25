@@ -26,10 +26,11 @@
 <textarea id="code" name="code">
 /**
  * 日期转中文
+ * @url dateToChinese
  * @param string $date 需要转换的日期，如：2024-10-25、2024-10
  * @return string $str 生成的日期 二〇二四年十月
  */
-function toDateChinese($date)
+function dateToChinese($date)
 {
     $date_arr = explode('-', $date);
     $arr = array();
