@@ -25,6 +25,40 @@
 <body>
 <textarea id="code" name="code">
 /**
+* 检测密码强度
+* @url checkPasswordStrength
+* @param string $password 检测密码，如：@123456aA
+* @return int $score 返回密码强度，如：0，1，2，3，4
+*/
+function checkPasswordStrength($password)
+{
+    //强度分数
+    $score = 0;
+
+    //包含数字
+    if(preg_match('/[0-9]+/', $password)) {
+        $score++;
+    }
+
+    //包含小写字母
+    if (preg_match('/[a-z]+/', $password)) {
+        $score++;
+    }
+
+    //包含大写字母
+    if (preg_match('/[A-Z]+/', $password)) {
+        $score++;
+    }
+
+    //包含特殊符号
+    if (preg_match('/[_|\\-|+|=|*|!|@|#|$|%|^|&|(|)|?]+/', $password)) {
+        $score++;
+    }
+
+    return $score;
+}
+
+/**
  * 日期转中文
  * @url toDateChinese
  * @param string $date 需要转换的日期，如：2024-10-25、2024-10
