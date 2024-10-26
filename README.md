@@ -10,3 +10,4 @@
 # php积累笔记
 [php函数](https://yangsphp.github.io/php)
 [上传类](https://yangsphp.github.io/php/upload.html)
+[验证码类](https://yangsphp.github.io/php/captcha.html)
