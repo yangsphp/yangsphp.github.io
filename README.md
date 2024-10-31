@@ -11,3 +11,4 @@
 [php函数](https://yangsphp.github.io/php)
 [上传类](https://yangsphp.github.io/php/upload.html)
 [验证码类](https://yangsphp.github.io/php/captcha.html)
+[分页类](https://yangsphp.github.io/php/page.html)

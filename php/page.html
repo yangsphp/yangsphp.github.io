@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>上传类</title>
+    <link rel="stylesheet" href="../codemirror/lib/codemirror.css">
+    <link rel="stylesheet" href="../codemirror/theme/monokai.css">
+    <style>
+        .CodeMirror {
+            border: 1px solid black;
+            font-size: 16px;
+            height: 90%;
+        }
+
+        body {
+            width: 1000px;
+            margin: 0 auto;
+        }
+    </style>
+</head>
+
+<body>
+<textarea id="code" name="code">
+<?php
+
+class Page {
+    //总条数
+    private $total;
+    //当前页数
+    private $page;
+    //当前地址
+    private $url;
+    //总页数
+    private $pagenum;
+    //每一页条数
+    private $pagesize;
+    //页码左右数
+    private $bothnum;
+
+    public function __construct($total, $pagesize, $bothnum = 5)
+    {
+        $this->total = $total;
+        $this->pagesize = $pagesize;
+        $this->pagenum = ceil($total/$pagesize);
+        $this->page = $this->getPage();
+        $this->url = $this->getUrl();
+        $this->bothnum = $bothnum;
+    }
+
+    /**
+        * 当前页码
+        * @return int
+        */
+    private function getPage()
+    {
+        $page = isset($_GET['page']) ? $_GET['page'] : 1;
+        if ($page < 1 || $page > $this->pagenum) {
+            return 1;
+        }
+        return $page;
+    }
+
+    /**
+        * 获取地址
+        * @return string
+        */
+    private function getUrl()
+    {
+        $url = $_SERVER['REQUEST_URI'];
+        $parse = parse_url($url);
+        if (isset($parse['query'])) {
+            parse_str($parse['query'], $query);
+            unset($query['page']);
+            $url = $parse['path'].'?'.http_build_query($query);
+        }
+        return $url;
+    }
+
+    /**
+        * 首页按钮渲染
+        * @return string
+        */
+    private function firstBtn()
+    {
+        if ($this->page == 1) {
+            return '<span class="disabled">首页</span>';
+        }
+        return '<a href="'.$this->url.'&page=1">首页</a>';
+    }
+
+    /**
+        * 上一页渲染
+        * @return string
+        */
+    private function prev()
+    {
+        if ($this->page == 1) {
+            return '<span class="disabled">上一页</span>';
+        }
+        return '<a href="'.$this->url.'&page='.($this->page - 1).'">上一页</a>';
+    }
+
+    /**
+        * 页数列表渲染
+        * @return string
+        */
+    private function pageList()
+    {
+        $html = '';
+        for($i = max(1, $this->page - $this->bothnum); $i <= min($this->pagenum, $this->page + $this->bothnum); $i++){
+            $html .= '<a class="'.($this->page == $i ? 'active' : '').'" href="'.$this->url.'&page='.$i.'">'.$i.'</a>';
+        }
+        return $html;
+    }
+
+    /**
+        * 下一页渲染
+        * @return string
+        */
+    private function next()
+    {
+        if ($this->pagenum == $this->page) {
+            return '<span class="disabled">下一页</span>';
+        }
+        return '<a href="'.$this->url.'&page='.($this->page + 1).'">下一页</a>';
+    }
+
+    /**
+        * 尾页渲染
+        * @return string
+        */
+    private function lastBtn()
+    {
+        if ($this->pagenum == $this->page) {
+            return '<span class="disabled">尾页</span>';
+        }
+        return '<a href="'.$this->url.'&page='.$this->pagenum.'">尾页</a>';
+    }
+
+    /**
+        * 分页渲染
+        * @return string
+        */
+    public function showPage()
+    {
+        $html = $this->firstBtn();
+        $html .= $this->prev();
+        $html .= $this->pageList();
+        $html .= $this->next();
+        $html .= $this->lastBtn();
+        return $html;
+    }
+}
+
+$total = 1000;
+$pagesize = 15;
+
+$page = new Page($total, $pagesize);
+?>
+
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+            content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>分页类</title>
+    <style>
+        .pages a.active{
+            background: #4E6EF2;
+            border: #4E6EF2 1px solid;
+            color: #FFFFFF;
+        }
+        .pages a, .pages span{
+            background: #FFFFFF;
+            border: #EEEEEE 1px solid;
+            padding: 5px 10px;
+            text-decoration: none;
+            margin-right: 3px;
+            border-radius: 3px;
+            color: #666666
+        }
+        .pages .disabled{
+            background: #f5f5f5 !important;
+        }
+    </style>
+</head>
+<body>
+    <div class="pages">
+        <?php echo $page->showPage();?>
+    </div>
+
+</body>
+</html>
+</textarea>
+</body>
+<script src="../codemirror/lib/codemirror.js"></script>
+<script src="../codemirror/addon/edit/matchbrackets.js"></script>
+<script src="../codemirror/addon/selection/active-line.js"></script>
+<script src="../codemirror/keymap/sublime.js"></script>
+<script src="../codemirror/mode/javascript/javascript.js"></script>
+<script>
+    let editor = CodeMirror.fromTextArea(document.getElementById("code"), {
+        mode: 'javascript', 
+        lineNumbers: true, //显示行号
+        smartIndent: true, //自动缩进是否开启
+        indentUnit: 4, //缩进单位
+        theme: 'monokai', //设置主题
+        styleActiveLine: true, //设置光标所在行高亮，需要引入addon/selection/active-line.js
+        keyMap: 'sublime', // 快捷键，default使用默认快捷键，除此之外包括emacs，sublime，vim快捷键，使用需引入工具,keymap/sublime.js
+        extraKeys: { 'Ctrl-Q': 'autocomplete' }, //设置快捷键
+    });
+</script>
+
+</html>
