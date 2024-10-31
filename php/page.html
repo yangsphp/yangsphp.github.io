@@ -25,7 +25,6 @@
 <body>
 <textarea id="code" name="code">
 <?php
-
 class Page {
     //总条数
     private $total;
@@ -51,9 +50,9 @@ class Page {
     }
 
     /**
-        * 当前页码
-        * @return int
-        */
+     * 当前页码
+     * @return int
+     */
     private function getPage()
     {
         $page = isset($_GET['page']) ? $_GET['page'] : 1;
@@ -64,9 +63,9 @@ class Page {
     }
 
     /**
-        * 获取地址
-        * @return string
-        */
+     * 获取地址
+     * @return string
+     */
     private function getUrl()
     {
         $url = $_SERVER['REQUEST_URI'];
@@ -80,9 +79,9 @@ class Page {
     }
 
     /**
-        * 首页按钮渲染
-        * @return string
-        */
+     * 首页按钮渲染
+     * @return string
+     */
     private function firstBtn()
     {
         if ($this->page == 1) {
@@ -92,9 +91,9 @@ class Page {
     }
 
     /**
-        * 上一页渲染
-        * @return string
-        */
+     * 上一页渲染
+     * @return string
+     */
     private function prev()
     {
         if ($this->page == 1) {
@@ -104,9 +103,9 @@ class Page {
     }
 
     /**
-        * 页数列表渲染
-        * @return string
-        */
+     * 页数列表渲染
+     * @return string
+     */
     private function pageList()
     {
         $html = '';
@@ -117,9 +116,9 @@ class Page {
     }
 
     /**
-        * 下一页渲染
-        * @return string
-        */
+     * 下一页渲染
+     * @return string
+     */
     private function next()
     {
         if ($this->pagenum == $this->page) {
@@ -129,9 +128,9 @@ class Page {
     }
 
     /**
-        * 尾页渲染
-        * @return string
-        */
+     * 尾页渲染
+     * @return string
+     */
     private function lastBtn()
     {
         if ($this->pagenum == $this->page) {
@@ -141,16 +140,18 @@ class Page {
     }
 
     /**
-        * 分页渲染
-        * @return string
-        */
-    public function showPage()
+     * 分页渲染
+     * @param string $html
+     * @return string
+     */
+    public function showPage($html = '')
     {
-        $html = $this->firstBtn();
+        $html .= $this->firstBtn();
         $html .= $this->prev();
         $html .= $this->pageList();
         $html .= $this->next();
         $html .= $this->lastBtn();
+        $html .= '<cite>共'.$this->total.'条/'.$this->pagenum.'页</cite>';
         return $html;
     }
 }
@@ -166,7 +167,7 @@ $page = new Page($total, $pagesize);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport"
-            content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>分页类</title>
     <style>
@@ -182,10 +183,14 @@ $page = new Page($total, $pagesize);
             text-decoration: none;
             margin-right: 3px;
             border-radius: 3px;
-            color: #666666
+            color: #333333;
         }
         .pages .disabled{
             background: #f5f5f5 !important;
+        }
+        .pages cite {
+            font-style: normal;
+            color: #333333;
         }
     </style>
 </head>
