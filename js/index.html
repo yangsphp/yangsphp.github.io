@@ -354,7 +354,7 @@ var utils = {
             return diff_day + '天前';
         } else if(diff_hour > 0 && diff_day <= 0) {
             return diff_hour + '小时前';
-        }else if(diff_minute <= 0 && diff_minute > 0) {
+        }else if(diff_hour <= 0 && diff_minute > 0) {
             return diff_minute + '分钟前';
         }else if(diff_second < 60){
             if(diff_second <= 0) {
