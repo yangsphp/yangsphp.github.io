@@ -627,6 +627,43 @@ function getPatternMatchImages($contentStr = "")
 }
 
 /**
+ * 参数过滤，防止sql注入
+ * @url strip_sql
+ * @param string $string 被过滤参数
+ * @param int $type 类型
+ */
+function strip_sql($string, $type = 1) {
+	if(is_array($string)) {
+		return array_map('strip_sql', $string);
+	} else {
+		if($type) {
+			$string = preg_replace("/\/\*([\s\S]*?)\*\//", "", $string);
+			$string = preg_replace("/0x([a-fA-d0-9]{2,})/", '0&#120;\\1', $string);
+			$string = preg_replace("/0X([a-fA-d0-9]{2,})/", '0&#88;\\1', $string);
+			$string = preg_replace_callback("/(select|update|replace|delete|drop)([\s\S]*?)(from)/i", 'strip_wd', $string);
+			$string = preg_replace_callback("/(load_file|substring|substr|reverse|trim|space|left|right|mid|lpad|concat|concat_ws|make_set|ascii|bin|oct|hex|ord|char|conv)([^a-z]?)\(/i", 'strip_wd', $string);
+			$string = preg_replace_callback("/(union|where|having|outfile|dumpfile)/i", 'strip_wd', $string);
+			return $string;
+		} else {
+			return str_replace(array('&#95;','&#100;','&#101;','&#103;','&#105;','&#109;','&#110;','&#112;','&#114;','&#115;','&#116;','&#118;','&#120;','&#69;','&#82;','&#84;','&#88;'), array('_','d','e','g','i','m','n','p','r','s','t','v','x','E','R','T','X'), $string);
+		}
+	}
+}
+
+/**
+ * @url strip_wd
+ */
+function strip_wd($m) {
+	if(is_array($m) && isset($m[1])) {
+		$wd = substr($m[1], 0, -1).'&#'.ord(substr($m[1], -1)).';';
+		if(isset($m[3])) return $wd.$m[2].$m[3];
+		if(isset($m[2])) return $wd.$m[2].'(';
+		return $wd;
+	}
+	return '';
+}
+
+/**
  * 记录日志内容
  * @url write_log
  * @method GET
