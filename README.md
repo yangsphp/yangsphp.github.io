@@ -8,8 +8,8 @@
 [js](https://yangsphp.github.io/js)
 
 # php积累笔记
-[php函数](https://yangsphp.github.io/php)
-[上传类](https://yangsphp.github.io/php/upload.html)
-[验证码类](https://yangsphp.github.io/php/captcha.html)
-[分页类](https://yangsphp.github.io/php/page.html)
+[php函数](https://yangsphp.github.io/php) |
+[上传类](https://yangsphp.github.io/php/upload.html) |
+[验证码类](https://yangsphp.github.io/php/captcha.html) |
+[分页类](https://yangsphp.github.io/php/page.html) |
 [公众号SDK](https://yangsphp.github.io/php/wechat.class.html)
