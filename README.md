@@ -12,4 +12,5 @@
 [上传类](https://yangsphp.github.io/php/upload.html) |
 [验证码类](https://yangsphp.github.io/php/captcha.html) |
 [分页类](https://yangsphp.github.io/php/page.html) |
-[公众号SDK](https://yangsphp.github.io/php/wechat.class.html)
+[公众号SDK](https://yangsphp.github.io/php/wechat.class.html) | 
+[小程序支付](https://yangsphp.github.io/php/minpay.html)
